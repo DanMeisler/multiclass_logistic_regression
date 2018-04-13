@@ -26,17 +26,18 @@ class MulticlassLogisticRegression(object):
 
         return float(self.num_of_mistakes) / float(self.total_iterations)
 
+    def probability_vector(self, xt):
+        return self.softmax(np.dot(self.w, xt) + self.b)
+
     def w_gradient(self, xt, yt):
-        scores = self.w.dot(xt) + self.b
-        normalized_scores = self.softmax(scores)
-        normalized_scores[self.classes.index(yt)] -= 1
-        return normalized_scores.dot(xt)
+        probability_vector = self.probability_vector(xt)
+        probability_vector[self.classes.index(yt)] -= 1
+        return probability_vector.dot(xt)
 
     def b_gradient(self, xt, yt):
-        scores = self.w.dot(xt) + self.b
-        normalized_scores = self.softmax(scores)
-        normalized_scores[self.classes.index(yt)] -= 1
-        return normalized_scores
+        probability_vector = self.probability_vector(xt)
+        probability_vector[self.classes.index(yt)] -= 1
+        return probability_vector
 
     def update_parameters(self, xt, yt):
         self.w -= self.LEARNING_RATE * self.w_gradient(xt, yt)
@@ -49,9 +50,6 @@ class MulticlassLogisticRegression(object):
                 y_hat = self.predict(xt)
                 print self.calc_loss(yt, y_hat)
                 self.update_parameters(xt, yt)
-
-    def probability_vector(self, xt):
-        return self.softmax(np.dot(self.w, xt) + self.b)
 
     def predict(self, xt):
         return self.classes[np.argmax(self.probability_vector(xt))]
