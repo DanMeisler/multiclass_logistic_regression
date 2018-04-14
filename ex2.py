@@ -72,11 +72,7 @@ def generate_training_set():
 
 
 def generate_test_set():
-    test_set = np.array([])
-    for a in [1, 2, 3]:
-        test_set = np.append(test_set, np.random.normal(2 * a, 1, 300))
-
-    return test_set
+    return np.random.uniform(0, 10, 1000)
 
 
 if __name__ == "__main__":
@@ -96,5 +92,7 @@ if __name__ == "__main__":
     plt.plot(test_set, [mlr.probability_vector(test_set[i])[0] for i in xrange(len(test_set))],
              "bo", label="prediction")
 
+    plt.xlabel("x")
+    plt.ylabel("P(y=1|x)")
     plt.legend()
     plt.show()
